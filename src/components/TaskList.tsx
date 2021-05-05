@@ -1,8 +1,9 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import '../styles/tasklist.scss'
 
 import { FiTrash, FiCheckSquare } from 'react-icons/fi'
+import { ProgressPlugin } from 'webpack';
 
 interface Task {
   id: number;
@@ -16,14 +17,25 @@ export function TaskList() {
 
   function handleCreateNewTask() {
     // Crie uma nova task com um id random, não permita criar caso o título seja vazio.
+    if (newTaskTitle != '') {
+      setTasks([...tasks, { id: Math.floor(Math.random() * 10000), title: newTaskTitle, isComplete: false }])
+    }
   }
 
   function handleToggleTaskCompletion(id: number) {
     // Altere entre `true` ou `false` o campo `isComplete` de uma task com dado ID
+    const newTasks = tasks.map(tasks => {
+      return tasks.id == id ? { ...tasks, isComplete: !tasks.isComplete} : tasks
+    });
+
+    setTasks(newTasks)
   }
 
   function handleRemoveTask(id: number) {
     // Remova uma task da listagem pelo ID
+    const newTasks = tasks.filter((task) => task.id !== id)
+ 
+    setTasks(newTasks)
   }
 
   return (
